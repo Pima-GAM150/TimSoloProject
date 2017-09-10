@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour {
 
+    public Rigidbody2D PlayerCharacter;
+    public float jumpForce;
+    public float horizontalMovement;
+
     // Use this for initialization
     void Start () {
 
@@ -12,10 +16,16 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //The longer the button is held, the longer the distance you will go (to a point).
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            print("Hello! This is what happens when you hold the spacebar.");
+            PlayerCharacter.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
+
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            horizontalMovement = Input.GetAxis("Horizontal");
+            PlayerCharacter.transform.Translate(new Vector2(horizontalMovement, 0) * 3 * Time.deltaTime);
+        }
+
 	}
 }
