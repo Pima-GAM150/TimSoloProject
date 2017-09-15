@@ -7,6 +7,9 @@ public class PlayerScript : MonoBehaviour {
     public Rigidbody2D PlayerCharacter;
     public float jumpForce;
     public float horizontalMovement;
+    public float verticalVelocity;
+    public int jumpCount = 0;
+    public bool isGrounded;
 
     // Use this for initialization
     void Start () {
@@ -16,16 +19,26 @@ public class PlayerScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        verticalVelocity = PlayerCharacter.velocity.y;
+
+        if (verticalVelocity == 0)
         {
-            PlayerCharacter.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            jumpCount = 0;
         }
 
+        //Causes the player to jump when Spacebar is pressed and prevents multi-jumping.
+        if (Input.GetKeyDown(KeyCode.Space) && jumpCount < 1)
+        {
+            PlayerCharacter.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            jumpCount += 1;
+        }
+
+        //Allows for horizontal movement
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow))
         {
             horizontalMovement = Input.GetAxis("Horizontal");
-            PlayerCharacter.transform.Translate(new Vector2(horizontalMovement, 0) * 3 * Time.deltaTime);
+            PlayerCharacter.transform.Translate(new Vector2(horizontalMovement, 0) * 6 * Time.deltaTime);
         }
 
-	}
+    }
 }
